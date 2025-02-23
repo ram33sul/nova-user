@@ -6,8 +6,10 @@ import { useDispatch } from "react-redux";
 import { useMemo, useState } from "react";
 import { InputErrors } from "../../types/general";
 import { Utils } from "./login.util";
+import { routePaths } from "../../Routes";
 
 export default function Login() {
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [errors, setErrors] = useState<InputErrors>({});
 
   const dispatch = useDispatch();
@@ -15,12 +17,15 @@ export default function Login() {
   const navigate = useNavigate();
 
   const navigateToSignup = () => {
-    navigate("/signup");
+    navigate(routePaths.SIGNUP);
   };
 
-  const utils = useMemo(() => new Utils(setErrors, dispatch), []);
+  const utils = useMemo(
+    () => new Utils(setErrors, dispatch, setSubmitLoading),
+    []
+  );
   return (
-    <div className="p-8 shadow-[0px_0px_30px_rgba(128,128,128,0.5)] max-w-[500px] m-auto mt-8 rounded-3xl">
+    <div className="px-4 py-8 shadow-[0px_0px_30px_rgba(128,128,128,0.5)] max-w-[500px] m-auto mt-8 rounded-3xl">
       <div className="text-center">LOGIN</div>
       <form onSubmit={utils.handleSubmit} className="flex flex-col gap-4 mt-4">
         <Input
@@ -36,7 +41,9 @@ export default function Login() {
           error={errors.password}
           onChange={utils.onInputChange}
         />
-        <Button className="w-full p-2">Submit</Button>
+        <Button loading={submitLoading} className="w-full p-2">
+          Submit
+        </Button>
         <div className="text-center">or</div>
         <Button
           onClick={navigateToSignup}

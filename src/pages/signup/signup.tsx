@@ -6,8 +6,10 @@ import { useMemo, useState } from "react";
 import { Utils } from "./signup.util";
 import { InputErrors } from "../../types/general";
 import { useDispatch } from "react-redux";
+import { routePaths } from "../../Routes";
 
 export default function Signup() {
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [errors, setErrors] = useState<InputErrors>({});
 
   const dispatch = useDispatch();
@@ -15,10 +17,13 @@ export default function Signup() {
   const navigate = useNavigate();
 
   const navigateToLogin = () => {
-    navigate("/login");
+    navigate(routePaths.LOGIN);
   };
 
-  const utils = useMemo(() => new Utils(setErrors, dispatch), []);
+  const utils = useMemo(
+    () => new Utils(setErrors, dispatch, setSubmitLoading),
+    []
+  );
 
   return (
     <div className="p-8 shadow-[0px_0px_30px_rgba(128,128,128,0.5)] max-w-[500px] m-auto mt-8 rounded-3xl">
@@ -44,7 +49,9 @@ export default function Signup() {
           error={errors.confirmPassword}
           onChange={utils.onInputChange}
         />
-        <Button className="w-full p-2">Submit</Button>
+        <Button loading={submitLoading} className="w-full p-2">
+          Submit
+        </Button>
         <div className="text-center">or</div>
         <Button
           onClick={navigateToLogin}

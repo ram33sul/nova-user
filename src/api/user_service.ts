@@ -1,4 +1,4 @@
-import { UserCredentials, UserWithTokens } from "../types/user";
+import { User, UserCredentials, UserWithTokens } from "../types/user";
 import { doApi } from "./do_api";
 
 export const postLogin = async (data: UserCredentials) => {
@@ -18,5 +18,23 @@ export const postRegister = async (data: UserCredentials) => {
     method,
     url,
     data,
+  });
+};
+
+export const postLogout = async () => {
+  const url = "/authorized/user/logout";
+  const method = "POST";
+  return await doApi<{ isLoggedOut: boolean }>({
+    method,
+    url,
+  });
+};
+
+export const getMe = async () => {
+  const url = "/authorized/user/me?role=USER";
+  const method = "GET";
+  return await doApi<User>({
+    method,
+    url,
   });
 };

@@ -2,7 +2,13 @@ import { Action } from "redux";
 import { SET_USER } from "./types";
 import { User } from "../../types/user";
 
-const initialState: User | null = null;
+const initialState: {
+  user: User | null;
+  loading: boolean;
+} = {
+  user: null,
+  loading: true,
+};
 
 interface UserAction extends Action {
   payload: User;
@@ -11,7 +17,10 @@ interface UserAction extends Action {
 const userReducer = (state = initialState, action: UserAction) => {
   switch (action.type) {
     case SET_USER:
-      return action.payload;
+      return {
+        user: action.payload,
+        loading: false,
+      };
     default:
       return state;
   }

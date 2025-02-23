@@ -14,9 +14,6 @@ export const validateUserCredentials = ({
   if (password.length < 6) {
     errors.password = "Password must have atleast 6 letters";
   }
-  if (!password) {
-    errors.password = "Password is required";
-  }
   if (confirmPassword !== undefined && password !== confirmPassword) {
     errors.confirmPassword = "Password doesn't match";
   }

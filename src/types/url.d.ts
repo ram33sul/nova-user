@@ -1,0 +1,5 @@
+export enum UrlType {
+  PASSPORT = "PASSPORT",
+  DRIVING_LICENSE = "DRIVING_LICENSE",
+  EMIRATES_ID = "EMIRATES_ID",
+}

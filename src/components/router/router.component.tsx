@@ -1,21 +1,36 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { Navigate, Route, Routes } from "react-router-dom";
-import routes from "../../Routes";
-
-const HOME = "/";
-const LOGIN = "/login";
+import routes, { routePaths } from "../../Routes";
+import useApi from "../../custom_hooks/useApi";
+import { getMe } from "../../api/user_service";
+import { useEffect } from "react";
+import { setUser } from "../../store/user/actions";
+import Loader from "../loader/loader.component";
 
 export default function Router() {
-  const { user } = useSelector((state: RootState) => state);
-  return (
+  const { user, loading } = useSelector((state: RootState) => state.user);
+
+  const [fetchedUser, userLoading] = useApi(getMe);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!userLoading) {
+      dispatch(setUser(fetchedUser));
+    }
+  }, [userLoading]);
+
+  return loading ? (
+    <Loader />
+  ) : (
     <Routes>
       {routes.map(({ path, element, shouldLogin, shouldLogout }) => {
         const elem =
           shouldLogin && !user ? (
-            <Navigate to={LOGIN} />
+            <Navigate to={routePaths.LOGIN} />
           ) : shouldLogout && user ? (
-            <Navigate to={HOME} />
+            <Navigate to={routePaths.HOME} />
           ) : (
             element
           );
